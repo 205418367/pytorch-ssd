@@ -94,6 +94,7 @@ class SSD(nn.Module):
             #confidences = torch.squeeze(confidences,1)
             confidences = F.softmax(confidences, dim=2)
             boxes = locations
+            #confidences = confidences
             #boxes = box_utils.convert_locations_to_boxes(
                 #locations, self.priors, self.config.center_variance, self.config.size_variance
             #)

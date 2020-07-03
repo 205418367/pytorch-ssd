@@ -30,14 +30,14 @@ $ python convert_to_onnx.py
 $ pip install onnx-simplifier
 $ cd pytorch-ssd/models/onnx/
 $ python -m onnxsim RFB-test.onnx RFB-test-simplifier.onnx
-$ cd pytorch-ssd/caffe/
+$ cd pytorch-ssd/onnx2caffe/
 # 设置 convertCaffe.py中相关路径
     onnx_path = "../models/onnx/RFB-test-simplifier.onnx"
     prototxt_path = "./models/RFB-320.prototxt"
     caffemodel_path = "./models/RFB-320.caffemodel"
 $ python convertCaffe.py
 ~~~
-此时，pytorch-ssd/caffe/models目录下生成caffe模型
+此时，pytorch-ssd/onnx2caffe/models目录下生成caffe模型
 
 ### 二、训练好的模型中添加和删除层
 
@@ -59,7 +59,7 @@ confidences = F.softmax(confidences, dim=2)
 
 ### 三、测试修改后caffe模型的正确性
 
-生成caffe模型后，修改pytorch-ssd/caffe/caffe_inference.py中caffemodel和prototxt路径
+生成caffe模型后，修改pytorch-ssd/onnx2caffe/caffe_inference.py中caffemodel和prototxt路径
 ```
 python caffe_inference.py
 ```
