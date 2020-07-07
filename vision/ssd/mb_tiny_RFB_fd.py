@@ -17,7 +17,7 @@ def SeperableConv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=
     )
 
 
-def create_Mb_Tiny_RFB_fd(num_classes, is_test=False, device="cuda"):
+def create_Mb_Tiny_RFB_fd(num_classes, is_test=False, device="cpu"):
     base_net = Mb_Tiny_RFB(2)
     base_net_model = base_net.model  # disable dropout layer
 
