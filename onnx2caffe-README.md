@@ -7,8 +7,7 @@
 ### Dependencies
 * Caffe 
 * Python3.6 
-* Pytorch1.2 
-* CUDA10.0 + CUDNN7.6 
+* Pytorch1.2(GPU)
 
 ### 一、pth模型转成caffe模型
 
