@@ -20,9 +20,9 @@ else:
 
 net.load(model_path)
 net.eval()
-net.to("cuda")
+net.to("cpu")
 
 model_path = f"models/onnx/RFB-test.onnx"
 
-dummy_input = torch.randn(1, 3, 240, 320).to("cuda")
+dummy_input = torch.randn(1, 3, 240, 320)
 torch.onnx.export(net, dummy_input, model_path, verbose=False, input_names=['input'], output_names=['scores', 'boxes'])
