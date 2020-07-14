@@ -1,0 +1,8 @@
+{
+    "modifier":"set_layer_data",
+    "input_caffemodel" : "models/RFB-320.caffemodel" ,
+    "output_prototxt"  : "models/RFB-test.prototxt",
+    "output_caffemodel": "models/RFB-test.caffemodel",
+    "name"   : "245",
+    "weight": [0]
+}
