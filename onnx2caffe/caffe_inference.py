@@ -3,14 +3,13 @@ import argparse
 import os
 import time
 from math import ceil
-
 import caffe
 import cv2
 import numpy as np
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--caffe_prototxt_path', default="models/RFB-320.prototxt", type=str, help='caffe_prototxt_path')
-parser.add_argument('--caffe_model_path', default="models/RFB-320.caffemodel", type=str, help='caffe_model_path')
+parser.add_argument('--caffe_prototxt_path', default="models/RFB-test.prototxt", type=str, help='caffe_prototxt_path')
+parser.add_argument('--caffe_model_path', default="models/RFB-test.caffemodel", type=str, help='caffe_model_path')
 parser.add_argument('--input_size', default="320,240", type=str, help='define network input size,format: width,height')
 parser.add_argument('--threshold', default=0.7, type=float, help='score threshold')
 parser.add_argument('--imgs_path', default="imgs/", type=str, help='imgs dir')

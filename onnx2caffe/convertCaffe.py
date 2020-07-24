@@ -1,16 +1,12 @@
 from __future__ import print_function
-
 import sys
-
 import caffe
 from caffe.proto import caffe_pb2
 import onnx
-
 caffe.set_mode_cpu()
 sys.path.append('../')
 from onnx2caffe._transformers import ConvAddFuser, ConstantsToInitializers
 from onnx2caffe._graph import Graph
-
 import onnx2caffe._operators as cvt
 import onnx2caffe._weightloader as wlr
 from onnx2caffe._error_utils import ErrorHandling
@@ -98,13 +94,12 @@ def getGraph(onnx_path):
     graph = Graph.from_onnx(model_graph)
     graph = graph.transformed(transformers)
     graph.channel_dims = {}
-
     return graph
 
 
 if __name__ == "__main__":
-    onnx_path = "../models/onnx/RFB-test-simplifier.onnx"
-    prototxt_path = "./models/RFB-320.prototxt"
-    caffemodel_path = "./models/RFB-320.caffemodel"
+    onnx_path = "/home/lichen/project/pytorch-ssd/onnx2caffe/models/onnx/yx_det_shared_2_sim.onnx"
+    prototxt_path = "models/caffemodel/yx_det_backbone_sim.prototxt"
+    caffemodel_path = "models/caffemodel/yx_det_backbone_sim.caffemodel"
     graph = getGraph(onnx_path)
     convertToCaffe(graph, prototxt_path, caffemodel_path)

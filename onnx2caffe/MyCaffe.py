@@ -91,11 +91,7 @@ class Function(object):
             for top in self.outputs:
                 layer.top.append(top)
         layer.name = self.layer_name
-        # print(self.type_name + "...")
         for k, v in six.iteritems(self.params):
-            # special case to handle generic *params
-            # print("generating "+k+"...")
-
             if k.endswith('param'):
                 assign_proto(layer, k, v)
             else:

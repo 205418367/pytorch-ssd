@@ -289,8 +289,8 @@ def _convert_gemm(node, graph, err):
                                 "Weight tensor: {} not found in the graph initializer".format(weight_name, ))
         return
 
-    if node.attrs["broadcast"] != 1 or node.attrs["transB"] != 1:
-        return err.unsupported_op_configuration(node, "Gemm is supported only for inner_product layer")
+    #if node.attrs["broadcast"] != 1 or node.attrs["transB"] != 1:
+    #    return err.unsupported_op_configuration(node, "Gemm is supported only for inner_product layer")
 
     b = None
     bias_flag = False
@@ -312,7 +312,8 @@ def _convert_gemm(node, graph, err):
 
 
 def _convert_upsample(node, graph, err):
-    factor = int(node.attrs["height_scale"])
+    #factor = int(node.attrs["height_scale"])
+    factor = 2
     node_name = node.name
     input_name = str(node.inputs[0])
     output_name = str(node.outputs[0])

@@ -34,6 +34,8 @@ def _convert_conv(net, node, graph, err):
 def _convert_relu(net, node, graph, err):
     pass
 
+def _convert_prelu(net, node, graph, err):
+    pass
 
 def _convert_sigmoid(net, node, graph, err):
     pass
@@ -95,8 +97,8 @@ def _convert_gemm(net, node, graph, err):
     else:
         err.missing_initializer(node,
                                 "Weight tensor: {} not found in the graph initializer".format(weight_name, ))
-    if node.attrs["broadcast"] != 1 or node.attrs["transB"] != 1:
-        return err.unsupported_op_configuration(node, "Gemm is supported only for inner_product layer")
+    #if node.attrs["broadcast"] != 1 or node.attrs["transB"] != 1:
+    #    return err.unsupported_op_configuration(node, "Gemm is supported only for inner_product layer")
     b = None
     if len(node.inputs) > 2:
         b = node.input_tensors[node.inputs[2]]
@@ -150,6 +152,7 @@ def _convert_conv_transpose(net, node, graph, err):
 _ONNX_NODE_REGISTRY = {
     "Conv": _convert_conv,
     "Relu": _convert_relu,
+    "PRelu": _convert_prelu,
     "BatchNormalization": _convert_BatchNorm,
     "Add": _convert_Add,
     "Mul": _convert_Mul,

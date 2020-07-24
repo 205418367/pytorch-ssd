@@ -9,17 +9,21 @@ from Caffe import layer_param
 import numpy as np
 import json
 import argparse
-                
+import os,sys
+              
+  
 def add_new_layer(json_dict):
-    top     = json_dict["top"]
-    layer    = json_dict["type"]
-    bottom  = json_dict["bottom"]
-    nextOP = json_dict["nextOP"]
+    currOPTop     = json_dict["currOPTop"]
+    layerType    = json_dict["layerType"]
+    prevOPName  = json_dict["prevOPName"]
+    nextOPName = json_dict["nextOPName"]
     
     net=caffe_net.Caffemodel(caffemodel_file)
-    layer_params = layer_param.Layer_param(name,layer,top,bottom,phase=1)
+    layer = net.get_layer_by_name(prevOPName)
+    prevOPBottom = layer.top[0] 
+    layer_params = layer_param.Layer_param(currOPName,layerType,currOPTop,prevOPBottom,phase=1)
     
-    if layer.endswith("Convolution"):
+    if layerType.endswith("Convolution"):
        ke_h = json_dict["kernel_h"]
        ke_w = json_dict["kernel_w"]
        num_out = json_dict["num_output"]
@@ -32,22 +36,24 @@ def add_new_layer(json_dict):
        pad_w = json_dict["pad_w"]
        weight  = np.array(json_dict["weight"]).astype(np.float32)
     
-       layerOP = net.get_layer_by_name(nextOP)
+       # 卷积层后面必须是BN层
+       layerOP = net.get_layer_by_name(nextOPName)
+       assert layerOP.type.endswith("BatchNorm")
        for blob in layerOP.blobs:
            shape=blob.shape.dim
-           assert layerOP.type.endswith("Scale")
            assert num_out == shape[0]
+           break
        layer_params.conv_param(kernel_h=ke_h,kernel_w=ke_w,num_output=num_out,stride_h=str_h,stride_w=str_w)
-       net.add_layer_with_data(layer_params, datas=weight, bottom=bottom)
-    elif layer.endswith("Softmax"):
+       net.add_layer_with_data(layer_params, datas=weight, bottom=prevOPBottom)
+    elif layerType.endswith("Softmax"):
        axis = json_dict["num_axis"]
        weight = json_dict["weight"]
        layer_params.softmax_param(num_axis=axis)
-       net.add_layer_with_data(layer_params, datas=weight, bottom=bottom)
+       net.add_layer_with_data(layer_params, datas=weight, bottom=prevOPBottom)
 
-    if nextOP != "":
-       layer = net.get_layer_by_name(nextOP)
-       layer.bottom[0] = top
+    if nextOPName != "":
+       layer = net.get_layer_by_name(nextOPName)
+       layer.bottom[0] = currOPTop 
     return net
 
 
@@ -59,38 +65,31 @@ def set_layer_data(json_dict):
 
 
 def remove_layer_by_name(json_dict):
-    top     = json_dict["top"]
-    nextOP = json_dict["nextOP"]
+    currOPTop      = json_dict["currOPTop "]
+    nextOPName = json_dict["nextOPName"]
     net=caffe_net.Caffemodel(caffemodel_file)
     net.remove_layer_by_name(name)
-    if nextOP != "":
-       layer = net.get_layer_by_name(nextOP)
-       layer.bottom[0] = top
+    if nextOPName != "":
+       layer = net.get_layer_by_name(nextOPName)
+       layer.bottom[0] = currOPTop
     return net
-
-
-def parser_args():
-    parser = argparse.ArgumentParser(description="modeify caffemodel")
-    parser.add_argument("--input", default="", type=str, required=True)
-    args = parser.parse_args()
-    return args
 
 
 def main(args):
     jsonFile = open(args.input, 'r', encoding='utf-8')
     json_dict = json.load(jsonFile)
-    global caffemodel_file,prototxt_file,changed_caffemodel,name
-    modifier    = json_dict["modifier"]
+    global caffemodel_file,prototxt_file,changed_caffemodel,currOPName
+    modifierType    = json_dict["modifierType"]
     caffemodel_file    = json_dict["input_caffemodel"]
     prototxt_file      = json_dict["output_prototxt"]
     changed_caffemodel = json_dict["output_caffemodel"]
-    name    = json_dict["name"]
+    currOPName    = json_dict["currOPName"]
 
-    if modifier.endswith("add_new_layer"):
+    if modifierType.endswith("add_new_layer"):
        net = add_new_layer(json_dict)
-    elif modifier.endswith("remove_layer_by_name"):
+    elif modifierType.endswith("remove_layer_by_name"):
        net = remove_layer_by_name(json_dict)
-    elif modifier.endswith("set_layer_data"):
+    elif modifierType.endswith("set_layer_data"):
        net = set_layer_data(json_dict)
 
     net.save_prototxt(prototxt_file)
@@ -98,9 +97,12 @@ def main(args):
  
 
 if __name__=='__main__':
-    args = parser_args()
-    main(args)
-    print("#### success done! ####")
+   parser = argparse.ArgumentParser(description="modeify caffemodel")
+   parser.add_argument("--input", default="", type=str, required=True)
+   args = parser.parse_args()
+   main(args)
+   print("#### succ ####")
+        
 
 
 

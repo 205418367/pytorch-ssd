@@ -1,13 +1,14 @@
 {
-    "modifier":"add_new_layer",
-    "num_axis" : 2 ,
+    "modifierType":"add_new_layer",
+    "num_axis"    : 2 ,
     "input_caffemodel" : "models/RFB-320.caffemodel" ,
     "output_prototxt"  : "models/RFB-test.prototxt",
     "output_caffemodel": "models/RFB-test.caffemodel",
-    "name"   : "scores",
-    "top"    : "scores",
-    "bottom" : "459",
-    "nextOP": "",
-    "type"      : "Softmax",
-    "weight"    : []
+    "currOPName"   : "newTest",
+    "currOPTop"    : "newTest",
+    "prevOPName"   : "246",
+    "nextOPName"   : "247",
+
+    "layerType"    : "Softmax",
+    "weight"       : []
 }
