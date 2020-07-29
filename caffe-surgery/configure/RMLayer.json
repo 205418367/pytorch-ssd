@@ -1,9 +1,9 @@
 {
-    "modifier":"remove_layer_by_name",
+    "modifierType":"remove_layer_by_name",
     "input_caffemodel" : "models/RFB-320.caffemodel" ,
     "output_prototxt"  : "models/RFB-test.prototxt",
     "output_caffemodel": "models/RFB-test.caffemodel",
-    "top": "246",
-    "name"   : "247",
-    "nextOP": "248"
+    "prevOPName": "246",
+    "currOPName": "247",
+    "nextOPName": "248"
 }

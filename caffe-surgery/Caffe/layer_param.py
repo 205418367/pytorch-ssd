@@ -67,6 +67,19 @@ class Layer_param():
         softmax_param.axis=num_axis  
         self.param.softmax_param.CopyFrom(softmax_param)
 
+    def permute_param(self):
+        if self.type not in ['Permute']:
+            raise TypeError('the layer type must be Permute if you want set Permute param')
+        permute_param=pb.PermuteParameter()  
+        self.param.permute_param.CopyFrom(permute_param)
+
+    def reshape_param(self, shape):
+        if self.type not in ['Reshape']:
+            raise TypeError('the layer type must be Reshape if you want set Reshape param')
+        reshape_param=pb.ReshapeParameter()
+        reshape_param.shape=shape
+        self.param.reshape_param.CopyFrom(reshape_param)
+
     def norm_param(self, eps):
         """
         add a conv_param layer if you spec the layer type "Convolution"
@@ -83,24 +96,6 @@ class Layer_param():
         l2norm_param.channel_shared = False
         l2norm_param.eps = eps
         self.param.norm_param.CopyFrom(l2norm_param)
-
-
-    def permute_param(self, order1, order2, order3, order4):
-        """
-        add a conv_param layer if you spec the layer type "Convolution"
-        Args:
-            num_output: a int
-            kernel_size: int list
-            stride: a int list
-            weight_filler_type: the weight filer type
-            bias_filler_type: the bias filler type
-        Returns:
-        """
-        permute_param = pb.PermuteParameter()
-        permute_param.order.extend([order1, order2, order3, order4])
-
-        self.param.permute_param.CopyFrom(permute_param)
-
 
     def pool_param(self,type='MAX',kernel_size=2,stride=2,pad=None, ceil_mode = True):
         pool_param=pb.PoolingParameter()

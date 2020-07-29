@@ -50,6 +50,15 @@ def add_new_layer(json_dict):
        weight = json_dict["weight"]
        layer_params.softmax_param(num_axis=axis)
        net.add_layer_with_data(layer_params, datas=weight, bottom=prevOPBottom)
+    elif layerType.endswith("Permute"):
+       weight = json_dict["weight"]
+       layer_params.permute_param()
+       net.add_layer_with_data(layer_params, datas=weight, bottom=prevOPBottom)
+    elif layerType.endswith("Reshape"):
+       weight = json_dict["weight"]
+       shape = json_dict["shape"]
+       layer_params.reshape_param(shape=shape)
+       net.add_layer_with_data(layer_params, datas=weight, bottom=prevOPBottom)
 
     if nextOPName != "":
        layer = net.get_layer_by_name(nextOPName)
@@ -65,13 +74,16 @@ def set_layer_data(json_dict):
 
 
 def remove_layer_by_name(json_dict):
-    currOPTop      = json_dict["currOPTop "]
+    prevOPName = json_dict["prevOPName"]
     nextOPName = json_dict["nextOPName"]
     net=caffe_net.Caffemodel(caffemodel_file)
-    net.remove_layer_by_name(name)
+    prevlayer = net.get_layer_by_name(prevOPName)
+    prevOPTop = prevlayer.top[0]
+    net.remove_layer_by_name(currOPName)
+    
     if nextOPName != "":
        layer = net.get_layer_by_name(nextOPName)
-       layer.bottom[0] = currOPTop
+       layer.bottom[0] = prevOPTop 
     return net
 
 

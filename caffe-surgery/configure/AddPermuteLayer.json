@@ -8,7 +8,6 @@
     "prevOPName"   : "246",
     "nextOPName"   : "247",
 
-    "layerType"    : "Softmax",
-    "num_axis"    : 2 ,
+    "layerType"    : "Permute",
     "weight"       : []
 }
