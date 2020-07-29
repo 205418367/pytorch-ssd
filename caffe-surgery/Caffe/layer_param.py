@@ -76,9 +76,8 @@ class Layer_param():
     def reshape_param(self, shape):
         if self.type not in ['Reshape']:
             raise TypeError('the layer type must be Reshape if you want set Reshape param')
-        reshape_param=pb.ReshapeParameter()
-        reshape_param.shape=shape
-        self.param.reshape_param.CopyFrom(reshape_param)
+        resh_param=pb.ReshapeParameter()
+        self.param.reshape_param.CopyFrom(resh_param)
 
     def norm_param(self, eps):
         """
