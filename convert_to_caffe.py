@@ -10,7 +10,7 @@ from vision.ssd.config.fd_config import define_img_size
 
 input_img_size = 320
 define_img_size(input_img_size)
-from vision.ssd.mb_tiny_RFB_fd import create_Mb_Tiny_RFB_fd
+#from vision.ssd.mb_tiny_RFB_fd import create_Mb_Tiny_RFB_fd
 from vision.ssd.mb_tiny_fd import create_mb_tiny_fd
 
 name='ultra-ssd'
@@ -28,7 +28,7 @@ def main():
 
     net.load(model_path)
     net.eval()
-    #net.to("cpu")
+    net.to("cpu")
 
     dummy_input=torch.ones([1,3,240,320])
     pytorch_to_caffe.trans_net(net,dummy_input,name)

@@ -136,10 +136,6 @@ class Caffemodel(_Net):
                 new_blob.shape.dim.append(dim)
             new_blob.data.extend(data.flatten().astype(float))
 
-    def add_layer(self,layer_params,datas, before='', after=''):
-        self.add_layer(layer_params,before,after)
-        new_layer =self.layer(layer_params.name)
-
     def get_layer_data(self,layer_name):
         layer=self.layer(layer_name)
         datas=[]
